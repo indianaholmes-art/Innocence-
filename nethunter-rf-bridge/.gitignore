@@ -9,3 +9,7 @@ capture-*.csv
 diagnostics-*.json
 host/build/
 *.egg-info/
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties

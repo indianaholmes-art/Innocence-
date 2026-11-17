@@ -46,3 +46,18 @@ jobs:
         with:
           name: firmware-${{ matrix.env }}
           path: nethunter-rf-bridge/firmware/.pio/build/${{ matrix.env }}/firmware.bin
+  android-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+      - run: chmod +x android/gradlew && cd android && ./gradlew --no-daemon assembleRelease
+      - run: cp android/app/build/outputs/apk/release/app-release.apk subGdev-release.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: subGdev-apk
+          path: nethunter-rf-bridge/subGdev-release.apk

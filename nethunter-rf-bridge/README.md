@@ -21,6 +21,8 @@ cloning or rolling-code functionality.
 firmware/            PlatformIO (Arduino on ESP-IDF) firmware
   include/           board_config.h (all GPIOs), radio_hal.h, cc1101.h, protocol.h …
   src/               main.cpp, cc1101.cpp (register-level driver), sim_radio.cpp, protocol.cpp
+android/             subGdev Android app (Kotlin, USB Host API, no deps)
+kernel/              NetHunter kernel config fragment + merge script
 host/nethunter_rf/   Python 3 app: transport, client, simulator, analysis, export, dashboard, cli
 config/              example radio profiles + protocol signature file
 docs/                PROTOCOL, HARDWARE (wiring/GPIO/compat), NETHUNTER_SETUP, USB_TROUBLESHOOTING, ARCHITECTURE
@@ -61,12 +63,19 @@ Arduino core and an emulated CC1101 register file, verifying the JSON protocol
 and the register values the driver writes (frequency word, data rate,
 modulation, PATABLE) against TI reference values.
 
+## subGdev Android app
+
+`android/` contains **subGdev**, a standalone APK that drives the board over
+USB-C without root, chroot or kernel drivers. See [android/README.md](android/README.md).
+The APK is built by CI (artifact `subGdev-apk`).
+
 ## Kernel driver
 
 ESP32-S3 native USB is a standard CDC-ACM device – the stock Linux `cdc_acm`
 driver is all that is needed, no custom kernel module. If your Android kernel
 lacks it, see [docs/NETHUNTER_SETUP.md §4](docs/NETHUNTER_SETUP.md) and
-`scripts/build_kernel_modules.sh`.
+`scripts/build_kernel_modules.sh`. To bake the drivers into your NetHunter
+kernel, merge `kernel/subgdev.config` with `kernel/apply_fragment.sh <kernel-src> <defconfig>`.
 
 ## Legal
 
