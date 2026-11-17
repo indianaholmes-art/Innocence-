@@ -1,0 +1,13 @@
+{
+  "description": "433.92 MHz OOK, 4.8 kBaud, sync D391 (matches TX_TEST from a second bridge)",
+  "radio": {
+    "frequency_mhz": 433.92,
+    "modulation": "ASK/OOK",
+    "data_rate_kbps": 4.8,
+    "rx_bandwidth_khz": 203,
+    "sync_word": "D391",
+    "sync_required": true,
+    "crc": false,
+    "max_packet_len": 61
+  }
+}

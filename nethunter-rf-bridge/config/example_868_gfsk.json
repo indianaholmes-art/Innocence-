@@ -1,0 +1,14 @@
+{
+  "description": "868.3 MHz GFSK 38.4 kBaud with CRC - typical TI SmartRF packet test profile",
+  "radio": {
+    "frequency_hz": 868300000,
+    "modulation": "GFSK",
+    "data_rate_kbps": 38.38,
+    "deviation_khz": 20.6,
+    "rx_bandwidth_khz": 101.6,
+    "sync_word": "D391",
+    "sync_required": true,
+    "crc": true,
+    "max_packet_len": 61
+  }
+}

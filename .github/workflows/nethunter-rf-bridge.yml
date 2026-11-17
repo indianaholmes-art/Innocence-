@@ -1,0 +1,48 @@
+name: nethunter-rf-bridge
+on:
+  push:
+    paths: ["nethunter-rf-bridge/**", ".github/workflows/nethunter-rf-bridge.yml"]
+  pull_request:
+    paths: ["nethunter-rf-bridge/**"]
+defaults:
+  run:
+    working-directory: nethunter-rf-bridge
+jobs:
+  host:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -r host/requirements.txt pytest
+      - run: python -m pytest -q tests
+  firmware-native-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git clone -q --depth 1 --branch v7.2.1 https://github.com/bblanchon/ArduinoJson.git /tmp/aj
+      - run: ARDUINOJSON_DIR=/tmp/aj/src tests/native/build_and_run.sh
+  firmware-build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [esp32s3_devkitc, esp32s3_generic, esp32s3_sim, esp32c3_devkitm]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.platformio
+          key: pio-${{ hashFiles('nethunter-rf-bridge/firmware/platformio.ini') }}
+      - run: pip install platformio
+      - run: pio run -d firmware -e ${{ matrix.env }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ matrix.env }}
+          path: nethunter-rf-bridge/firmware/.pio/build/${{ matrix.env }}/firmware.bin

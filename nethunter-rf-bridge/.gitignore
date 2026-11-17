@@ -1,0 +1,11 @@
+firmware/.pio/
+__pycache__/
+*.pyc
+.pytest_cache/
+kmod-out/
+rf-captures/
+capture-*.json
+capture-*.csv
+diagnostics-*.json
+host/build/
+*.egg-info/

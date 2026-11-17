@@ -1,0 +1,13 @@
+{
+  "signatures": [
+    {
+      "name": "My lab sensor v1",
+      "description": "Example of a user-defined frame layout: 0xA5 header, 6 bytes",
+      "prefix": "A5",
+      "lengths": [6],
+      "modulations": ["ASK/OOK"],
+      "bands_mhz": [[433.0, 435.0]],
+      "reference": "internal lab notes"
+    }
+  ]
+}
